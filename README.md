@@ -136,3 +136,11 @@ export class TestComponent {
 ```
 
 Thank you!
+
+## Contributions
+
+Contributions are welcome! If you find a bug or have a feature request, please open an issue on the Github repository. If you'd like to contribute code, please fork the repository and submit a pull request with your changes.
+
+## License
+
+This library is licensed under the MIT license.
