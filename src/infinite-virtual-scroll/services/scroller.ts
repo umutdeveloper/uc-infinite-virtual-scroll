@@ -1,6 +1,6 @@
 import { TemplateRef, ViewContainerRef } from '@angular/core';
 import { fromEvent, tap, debounceTime, Subscription, filter } from 'rxjs';
-import { isScrollAtBottom } from './scroll-resolver';
+import { getScrollPosition, isScrollAtBottom } from './scroll-resolver';
 import { ScrollState } from './scroll-state';
 import { getContainer } from './view-resolver';
 import { ViewState } from './view-state';
@@ -35,8 +35,12 @@ export class Scroller {
   }
 
   scrollToStart() {
-    this.scrollState.setScrollPosition(0);
-    this.viewState.scroll();
+    let scrollPosition = getScrollPosition(this.viewContainerRef);
+    do {
+      this.scrollState.setScrollPosition(0);
+      this.viewState.scroll();
+      scrollPosition = getScrollPosition(this.viewContainerRef);
+    } while (scrollPosition !== 0);
   }
 
   reset() {

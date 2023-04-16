@@ -5,6 +5,8 @@ import {
   createMapFor,
   createViewFor,
   findFirstItemIndex,
+  findFirstVisibleItem,
+  findNewIndexOfExistingItem,
   getTotalHeight,
   mergeMapWith,
   setMapPropertiesFor,
@@ -36,12 +38,21 @@ export class ViewState {
   }
 
   update(items: any[], reset = false) {
+    const visibleItemInfo = this.calculateVisibleItemInfo(items);
     this.updateItems(items, reset);
-    this.scroll(true);
+    this.scroll(visibleItemInfo, true);
   }
 
-  scroll(forceUpdate = false) {
-    const scrollPosition = getScrollPosition(this.viewContainerRef);
+  scroll(
+    visibleItemInfo: {
+      scrollPosition: number;
+      viewportOffsetTop: number;
+      index: number;
+      newIndex: number;
+    } = this.calculateVisibleItemInfo(),
+    forceUpdate = false
+  ) {
+    const { scrollPosition, viewportOffsetTop, newIndex } = visibleItemInfo;
     const firstItemIndex = findFirstItemIndex(
       this.itemMap,
       scrollPosition,
@@ -51,12 +62,33 @@ export class ViewState {
       this.firstItemIndex = firstItemIndex;
       this.updateView();
       this.updatePlaceholdersHeight();
+      const offsetTop = getTotalHeight(this.itemMap, 0, newIndex);
+      this.scrollState.setScrollPosition(offsetTop - viewportOffsetTop);
     }
-    this.scrollState.setScrollPosition(scrollPosition);
+  }
+
+  private calculateVisibleItemInfo(items?: any[]) {
+    const scrollPosition = getScrollPosition(this.viewContainerRef);
+    const { viewportOffsetTop, index } = findFirstVisibleItem(
+      this.itemMap,
+      this.firstItemIndex,
+      this.totalItemSize,
+      scrollPosition
+    );
+    let newIndex = index;
+    if (items) {
+      newIndex = findNewIndexOfExistingItem(
+        items,
+        index,
+        this.trackByMap,
+        this.trackBy
+      );
+    }
+    return { scrollPosition, viewportOffsetTop, index, newIndex };
   }
 
   private updateItems(items: any[], reset: boolean) {
-    const itemMap = createMapFor(items, 0);
+    const itemMap = createMapFor(items, 0.1); // Item offsets should be different.
     if (!reset) {
       this.itemMap = mergeMapWith(
         items,

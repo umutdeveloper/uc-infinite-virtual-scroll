@@ -57,4 +57,8 @@ export class TestComponent implements OnInit {
       1000
     );
   }
+
+  addItemsToTop() {
+    this.posts = [...this.generatePosts(1, this.posts.length), ...this.posts];
+  }
 }

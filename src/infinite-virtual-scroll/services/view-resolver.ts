@@ -1,4 +1,5 @@
 import { ViewContainerRef, TemplateRef, EmbeddedViewRef } from '@angular/core';
+import { getScrollPosition } from './scroll-resolver';
 import { MapProperties } from './view-state';
 
 export function getContainer(viewContainerRef: ViewContainerRef): HTMLElement {
@@ -94,14 +95,55 @@ export function findFirstItemIndex(
   for (let i = 0; i < indexList.length; i++) {
     const offsetStart = getTotalHeight(map, 0, indexList[i]);
     const height = map.get(indexList[i]).height;
-    const centerOfItems = Math.floor(totalItemSize / 2); // This provides a buffer range
     if (offsetStart > scrollPosition) {
-      return indexList[i] > centerOfItems ? indexList[i] - centerOfItems : 0;
+      return getBufferedIndex(indexList[i], totalItemSize);
     } else if (offsetStart + height > scrollPosition) {
-      return indexList[i] > centerOfItems + 1
-        ? indexList[i] - centerOfItems + 1
-        : 0;
+      return getBufferedIndex(indexList[i] + 1, totalItemSize);
     }
   }
   return 0;
+}
+
+export function getBufferedIndex(index: number, totalItemSize: number) {
+  const centerOfItems = Math.floor(totalItemSize / 2); // This provides a buffer range
+  return index > centerOfItems ? index - centerOfItems : 0;
+}
+
+export function findFirstVisibleItem(
+  map: Map<number, MapProperties>,
+  firstItemIndex: number,
+  totalItemSize: number,
+  scrollPosition: number
+) {
+  let viewportOffsetTop = 0;
+  let index = 0;
+  for (let i = firstItemIndex; i < map.size; i++) {
+    const offsetTop = getTotalHeight(map, 0, i);
+    if (offsetTop >= scrollPosition) {
+      viewportOffsetTop = offsetTop - scrollPosition;
+      index = i;
+      break;
+    }
+  }
+  return { viewportOffsetTop, index };
+}
+
+export function findNewIndexOfExistingItem(
+  items: any[],
+  index: number,
+  trackMap: Map<any, number>,
+  trackBy: string
+) {
+  let newIndex = 0;
+  const itemLength = items.length;
+  for (let i = index; i < itemLength; i++) {
+    const indexFound = items.findIndex(
+      (item) => trackMap.get(item[trackBy]) === i
+    );
+    if (indexFound !== -1) {
+      newIndex = indexFound;
+      break;
+    }
+  }
+  return newIndex;
 }
