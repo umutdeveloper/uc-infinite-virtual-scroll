@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { InfiniteVirtualScrollViewportComponent } from '../infinite-virtual-scroll/infinite-virtual-scroll-viewport/infinite-virtual-scroll-viewport.component';
 import { InfiniteVirtualScrollModule } from '../infinite-virtual-scroll/infinite-virtual-scroll.module';
 import { generateParagraph } from '../utils';
 
@@ -10,14 +11,30 @@ import { generateParagraph } from '../utils';
   styleUrls: ['./test.component.scss'],
 })
 export class TestComponent implements OnInit {
+  @ViewChild(InfiniteVirtualScrollViewportComponent)
+  viewport: InfiniteVirtualScrollViewportComponent;
+
   posts: { id: number; text: string }[];
 
   constructor() {
-    setTimeout(() => (this.posts = this.generatePosts(5000, 0)), 1000);
+    setTimeout(() => (this.posts = this.generatePosts(50, 0)), 1000);
     // setInterval(() => this.generatePosts(), 2000);
   }
 
   ngOnInit() {}
+
+  scrollToStart() {
+    this.viewport.scrollToStart();
+  }
+
+  handleScrollAtBottom() {
+    this.addItems();
+  }
+
+  reset() {
+    this.viewport.reset();
+    this.posts = [...this.generatePosts(30, 0)];
+  }
 
   generatePosts(length: number, idPrefix: number) {
     return Array.from({ length }, generateParagraph.bind(this)).map(
@@ -31,9 +48,13 @@ export class TestComponent implements OnInit {
   }
 
   addItems() {
-    this.posts = [
-      ...this.posts,
-      ...this.generatePosts(5000, this.posts.length),
-    ];
+    setTimeout(
+      () =>
+        (this.posts = [
+          ...this.posts,
+          ...this.generatePosts(50, this.posts.length),
+        ]),
+      1000
+    );
   }
 }

@@ -8,6 +8,7 @@ import {
   getTotalHeight,
   mergeMapWith,
   setMapPropertiesFor,
+  setTrackMap,
 } from './view-resolver';
 
 export interface MapProperties {
@@ -20,16 +21,22 @@ export class ViewState {
   itemMap = new Map<number, MapProperties>();
   trackByMap = new Map<any, number>();
 
+  private totalItemSize: number;
+  private trackBy: string;
+
   constructor(
-    private totalItemSize: number,
     private viewContainerRef: ViewContainerRef,
     private templateRef: TemplateRef<any>,
-    private scrollState: ScrollState,
-    private trackBy: string
+    private scrollState: ScrollState
   ) {}
 
-  update(items: any[]) {
-    this.updateItems(items);
+  init(totalItemSize: number, trackBy: string) {
+    this.totalItemSize = totalItemSize;
+    this.trackBy = trackBy;
+  }
+
+  update(items: any[], reset = false) {
+    this.updateItems(items, reset);
     this.scroll(true);
   }
 
@@ -48,15 +55,21 @@ export class ViewState {
     this.scrollState.setScrollPosition(scrollPosition);
   }
 
-  private updateItems(items: any[]) {
+  private updateItems(items: any[], reset: boolean) {
     const itemMap = createMapFor(items, 0);
-    this.itemMap = mergeMapWith(
-      items,
-      itemMap,
-      this.itemMap,
-      this.trackByMap,
-      this.trackBy
-    );
+    if (!reset) {
+      this.itemMap = mergeMapWith(
+        items,
+        itemMap,
+        this.itemMap,
+        this.trackByMap,
+        this.trackBy
+      );
+    } else {
+      this.itemMap = itemMap;
+      this.trackByMap.clear();
+    }
+    setTrackMap(this.trackByMap, this.trackBy, items);
     this.items = [...items];
   }
 

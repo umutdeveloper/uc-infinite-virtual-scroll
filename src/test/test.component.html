@@ -1,8 +1,13 @@
 <button (click)="addItems()">Add items</button>
 <button (click)="removeItems()">Remove 3 items</button>
+<button (click)="scrollToStart()">Scroll to start</button>
+<button (click)="reset()">Reset view</button>
 
 <div class="posts-wrapper">
-  <app-infinite-virtual-scroll-viewport>
+  <app-infinite-virtual-scroll-viewport
+    #viewport
+    (onScrollAtBottom)="handleScrollAtBottom()"
+  >
     <div
       class="post-item"
       *appInfiniteVirtualFor="

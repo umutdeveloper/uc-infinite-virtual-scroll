@@ -14,12 +14,14 @@ import { inputPropChanged } from './services/utils';
   selector: '[appInfiniteVirtualFor][appInfiniteVirtualForOf]',
 })
 export class InfiniteVirtualForDirective implements OnChanges, OnDestroy {
-  private scroller: Scroller;
+  private scroller?: Scroller;
 
   constructor(
     private readonly templateRef: TemplateRef<any>,
     private readonly viewContainerRef: ViewContainerRef
-  ) {}
+  ) {
+    this.setup();
+  }
 
   @Input() appInfiniteVirtualForOf: any[] = [];
   @Input() appInfiniteVirtualForSize: number;
@@ -30,12 +32,14 @@ export class InfiniteVirtualForDirective implements OnChanges, OnDestroy {
     const { appInfiniteVirtualForOf } = changes;
     const itemsChanged = inputPropChanged(appInfiniteVirtualForOf);
     if (
-      itemsChanged &&
       this.appInfiniteVirtualForSize &&
-      this.appInfiniteVirtualForTrackBy
+      this.appInfiniteVirtualForTrackBy &&
+      this.appInfiniteVirtualForDebounceTime
     ) {
-      this.setup();
-      this.update(this.appInfiniteVirtualForOf);
+      this.init();
+      if (itemsChanged) {
+        this.update(this.appInfiniteVirtualForOf);
+      }
     }
   }
 
@@ -46,18 +50,18 @@ export class InfiniteVirtualForDirective implements OnChanges, OnDestroy {
   }
 
   private setup() {
-    if (!this.scroller) {
-      this.scroller = new Scroller(
-        this.templateRef,
-        this.viewContainerRef,
-        this.appInfiniteVirtualForSize,
-        this.appInfiniteVirtualForTrackBy,
-        this.appInfiniteVirtualForDebounceTime
-      );
-    }
+    this.scroller = new Scroller(this.templateRef, this.viewContainerRef);
   }
 
   private update(items: any) {
     this.scroller.update(items);
+  }
+
+  private init() {
+    this.scroller.init(
+      this.appInfiniteVirtualForSize,
+      this.appInfiniteVirtualForTrackBy,
+      this.appInfiniteVirtualForDebounceTime
+    );
   }
 }

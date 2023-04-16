@@ -31,3 +31,14 @@ export function setEndPlaceholderHeight(
   const endPlaceholder = container.lastElementChild as HTMLElement;
   endPlaceholder.style.height = `${amount}px`;
 }
+
+export function isScrollAtBottom(viewContainerRef) {
+  const container = getContainer(viewContainerRef);
+  const containerOffsetHeight = container.offsetHeight;
+  const scrollPosition = getScrollPosition(viewContainerRef);
+  const scrollHeight = container.scrollHeight;
+  return (
+    scrollHeight === containerOffsetHeight + scrollPosition &&
+    scrollPosition !== 0
+  );
+}

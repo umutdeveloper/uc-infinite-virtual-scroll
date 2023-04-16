@@ -27,8 +27,15 @@ export function mergeMapWith(
       }
     }
   });
-  items.forEach((item, index) => trackMap.set(item[trackBy], index));
   return newMap;
+}
+
+export function setTrackMap(
+  trackMap: Map<any, number>,
+  trackBy: string,
+  items: any[]
+) {
+  items.forEach((item, index) => trackMap.set(item[trackBy], index));
 }
 
 export function setMapPropertiesFor(
@@ -69,10 +76,13 @@ export function getTotalHeight(
   startIndex: number,
   endIndex: number
 ): number {
-  return [...map.values()].slice(startIndex, endIndex).reduce((acc, curr) => {
-    let height = curr.height;
-    return acc + height;
-  }, 0);
+  return [...map.values()]
+    .filter((curr) => !!curr.height)
+    .slice(startIndex, endIndex)
+    .reduce((acc, curr) => {
+      let height = curr.height;
+      return acc + height;
+    }, 0);
 }
 
 export function findFirstItemIndex(
