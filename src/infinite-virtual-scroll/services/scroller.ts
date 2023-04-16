@@ -31,6 +31,11 @@ export class Scroller {
     this.viewState.update(items);
   }
 
+  scrollToStart() {
+    this.scrollState.setScrollPosition(0);
+    this.viewState.scroll();
+  }
+
   destroy() {
     this.disposeScroller.unsubscribe();
   }

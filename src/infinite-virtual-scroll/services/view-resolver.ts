@@ -38,7 +38,9 @@ export function setMapPropertiesFor(
 ) {
   [...map.keys()]
     .filter(
-      (index) => index < startIndex || index > startIndex + properties.length
+      (index) =>
+        !!map.get(index).viewRef &&
+        (index < startIndex || index > startIndex + properties.length)
     )
     .forEach((index) => {
       map.set(index, { ...map.get(index), viewRef: undefined });
