@@ -36,15 +36,6 @@ export function setMapPropertiesFor(
   properties: MapProperties[],
   startIndex: number
 ) {
-  [...map.keys()]
-    .filter(
-      (index) =>
-        !!map.get(index).viewRef &&
-        (index < startIndex || index > startIndex + properties.length)
-    )
-    .forEach((index) => {
-      map.set(index, { ...map.get(index), viewRef: undefined });
-    });
   properties.forEach((property, index) => {
     map.set(startIndex + index, property);
   });
@@ -65,7 +56,6 @@ export function createViewFor(
     viewRef.detectChanges();
     return {
       height: getHeight(viewRef),
-      viewRef,
     };
   });
 }

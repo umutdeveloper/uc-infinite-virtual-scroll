@@ -1,4 +1,4 @@
-import { EmbeddedViewRef, TemplateRef, ViewContainerRef } from '@angular/core';
+import { TemplateRef, ViewContainerRef } from '@angular/core';
 import { getScrollPosition } from './scroll-resolver';
 import { ScrollState } from './scroll-state';
 import {
@@ -12,7 +12,6 @@ import {
 
 export interface MapProperties {
   height: number;
-  viewRef?: EmbeddedViewRef<any>;
 }
 
 export class ViewState {
