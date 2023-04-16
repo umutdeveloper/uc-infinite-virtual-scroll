@@ -1,19 +1,21 @@
 import { TemplateRef, ViewContainerRef } from '@angular/core';
-import { fromEvent, tap, debounceTime, map, Subject, Subscription } from 'rxjs';
+import { fromEvent, tap, debounceTime, Subscription, filter } from 'rxjs';
 import { isScrollAtBottom } from './scroll-resolver';
 import { ScrollState } from './scroll-state';
 import { getContainer } from './view-resolver';
 import { ViewState } from './view-state';
 
 export class Scroller {
-  private readonly _onScrollAtBottom$ = new Subject<void>();
   private readonly scrollState: ScrollState;
   private readonly viewState: ViewState;
   private disposeScroller: Subscription;
   private isInitialized = false;
+  private debounceTime: number;
 
   get onScrollAtBottom$() {
-    return this._onScrollAtBottom$.asObservable();
+    return this.getScrollEvent().pipe(
+      filter(() => isScrollAtBottom(this.viewContainerRef))
+    );
   }
 
   constructor(
@@ -47,25 +49,22 @@ export class Scroller {
 
   init(totalItemSize: number, trackBy: string, debounceTime: number) {
     if (!this.isInitialized) {
+      this.debounceTime = debounceTime;
       this.isInitialized = true;
       this.viewState.init(totalItemSize, trackBy);
-      this.attachScrollEvent(debounceTime);
+      this.attachScrollEvent();
       this.attachScrollerToViewport();
     }
   }
 
-  private attachScrollEvent(debounce: number) {
+  private getScrollEvent() {
     const container = getContainer(this.viewContainerRef);
-    this.disposeScroller = fromEvent(container, 'scroll')
-      .pipe(
-        debounceTime(debounce),
-        tap(() => {
-          this.viewState.scroll();
-          if (isScrollAtBottom(this.viewContainerRef)) {
-            this._onScrollAtBottom$.next();
-          }
-        })
-      )
+    return fromEvent(container, 'scroll').pipe(debounceTime(this.debounceTime));
+  }
+
+  private attachScrollEvent() {
+    this.disposeScroller = this.getScrollEvent()
+      .pipe(tap(() => this.viewState.scroll()))
       .subscribe();
   }
 
