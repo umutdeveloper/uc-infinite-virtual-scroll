@@ -1,0 +1,21 @@
+<button (click)="addItems()">Add items</button>
+<button (click)="removeItems()">Remove 3 items</button>
+
+<div class="posts-wrapper">
+  <app-infinite-virtual-scroll-viewport>
+    <div
+      class="post-item"
+      *appInfiniteVirtualFor="
+        let post of posts;
+        size: 27;
+        trackBy: 'id';
+        let i = index
+      "
+    >
+      <div>
+        {{ post.id }}<br />
+        {{ post.text }}
+      </div>
+    </div>
+  </app-infinite-virtual-scroll-viewport>
+</div>

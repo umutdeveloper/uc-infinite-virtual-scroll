@@ -1,0 +1,19 @@
+:host {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: block;
+}
+
+.infinite-virtual-scroll-viewport {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.placeholder-top,
+.placeholder-bottom {
+  height: 0;
+}

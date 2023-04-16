@@ -1,0 +1,31 @@
+.post-item {
+  padding: 5px 10px;
+  box-sizing: border-box;
+  font-size: 12px;
+
+  &:first-child {
+    padding-top: 10px;
+  }
+
+  &:last-child {
+    padding-bottom: 10px;
+  }
+
+  & > div {
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+    word-break: break-all;
+  }
+}
+
+button {
+  margin: 10px;
+}
+
+.posts-wrapper {
+  width: 500px;
+  height: 700px;
+  position: relative;
+}
