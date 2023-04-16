@@ -20,16 +20,6 @@ Angular CDK has the autosize directive that it has been developing experimentall
 ## Demo
 [Try the Demo in StackBlitz](https://stackblitz.com/edit/uc-ngx-infinite-virtual-scroll)
 
-## Front End Consulting Services
-
-I'm a Senior Front End Engineer. My services include:
-
-- Angular/Javascript Consulting
-- Code Review
-- Web Application Development
-
-[Contact Here](https://www.linkedin.com/in/umuttcakir/)
-
 ## Supported API
 ### Properties
 
@@ -136,6 +126,14 @@ export class TestComponent {
 ```
 
 Thank you!
+
+## Front End Services
+
+- Angular/Javascript Consulting
+- Code Review
+- Web Application Development
+
+[Contact Here](https://www.linkedin.com/in/umuttcakir/)
 
 ## Contributions
 
