@@ -27,7 +27,7 @@ Angular CDK has the autosize directive that it has been developing experimentall
 |--|--|--|--|--|
 | *appInfiniteVirtualFor | any[] | optional | [] | List of items to display in viewport |
 | size | number | required | - | Specifies how many elements to render on the DOM in the viewport at once. |
-| debounceTime | number | optional | 20 | Debounce time to be applied when listening to scroll event in viewport (ms) |
+| debounceTime | number | optional | 10 | Debounce time to be applied when listening to scroll event in viewport (ms) |
 | trackBy | string | required | - | Item field name to use when comparing existing items and new ones in the viewport. For ex; 'id' |
 
 ### Events
