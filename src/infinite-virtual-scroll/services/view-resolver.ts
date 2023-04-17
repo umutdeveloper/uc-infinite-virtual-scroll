@@ -1,5 +1,4 @@
 import { ViewContainerRef, TemplateRef, EmbeddedViewRef } from '@angular/core';
-import { getScrollPosition } from './scroll-resolver';
 import { MapProperties } from './view-state';
 
 export function getContainer(viewContainerRef: ViewContainerRef): HTMLElement {
@@ -112,7 +111,6 @@ export function getBufferedIndex(index: number, totalItemSize: number) {
 export function findFirstVisibleItem(
   map: Map<number, MapProperties>,
   firstItemIndex: number,
-  totalItemSize: number,
   scrollPosition: number
 ) {
   let viewportOffsetTop = 0;

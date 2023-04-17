@@ -35,7 +35,7 @@ export class Scroller {
   }
 
   scrollToStart() {
-    let scrollPosition = getScrollPosition(this.viewContainerRef);
+    let scrollPosition: number;
     do {
       this.scrollState.setScrollPosition(0);
       this.viewState.scroll();

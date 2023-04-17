@@ -36,9 +36,9 @@ export function isScrollAtBottom(viewContainerRef) {
   const container = getContainer(viewContainerRef);
   const containerOffsetHeight = container.offsetHeight;
   const scrollPosition = getScrollPosition(viewContainerRef);
-  const scrollHeight = container.scrollHeight;
+  const scrollHeight = Math.floor(container.scrollHeight);
   return (
-    scrollHeight === containerOffsetHeight + scrollPosition &&
+    scrollHeight === Math.floor(containerOffsetHeight + scrollPosition) &&
     scrollPosition !== 0
   );
 }

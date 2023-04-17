@@ -48,11 +48,10 @@ export class ViewState {
       scrollPosition: number;
       viewportOffsetTop: number;
       index: number;
-      newIndex: number;
     } = this.calculateVisibleItemInfo(),
     forceUpdate = false
   ) {
-    const { scrollPosition, viewportOffsetTop, newIndex } = visibleItemInfo;
+    const { scrollPosition, viewportOffsetTop, index } = visibleItemInfo;
     const firstItemIndex = findFirstItemIndex(
       this.itemMap,
       scrollPosition,
@@ -62,7 +61,7 @@ export class ViewState {
       this.firstItemIndex = firstItemIndex;
       this.updateView();
       this.updatePlaceholdersHeight();
-      const offsetTop = getTotalHeight(this.itemMap, 0, newIndex);
+      const offsetTop = getTotalHeight(this.itemMap, 0, index);
       this.scrollState.setScrollPosition(offsetTop - viewportOffsetTop);
     }
   }
@@ -72,7 +71,6 @@ export class ViewState {
     const { viewportOffsetTop, index } = findFirstVisibleItem(
       this.itemMap,
       this.firstItemIndex,
-      this.totalItemSize,
       scrollPosition
     );
     let newIndex = index;
@@ -84,7 +82,7 @@ export class ViewState {
         this.trackBy
       );
     }
-    return { scrollPosition, viewportOffsetTop, index, newIndex };
+    return { scrollPosition, viewportOffsetTop, index: newIndex };
   }
 
   private updateItems(items: any[], reset: boolean) {

@@ -15,9 +15,10 @@ export class TestComponent implements OnInit {
   viewport: InfiniteVirtualScrollViewportComponent;
 
   posts: { id: number; text: string }[];
+  lastId = 0;
 
   constructor() {
-    setTimeout(() => (this.posts = this.generatePosts(50, 0)), 1000);
+    setTimeout(() => (this.posts = this.generatePosts(50, this.lastId)), 1000);
     // setInterval(() => this.generatePosts(), 2000);
   }
 
@@ -37,6 +38,7 @@ export class TestComponent implements OnInit {
   }
 
   generatePosts(length: number, idPrefix: number) {
+    this.lastId += length;
     return Array.from({ length }, generateParagraph.bind(this)).map(
       (text: string, index) => ({ id: index + idPrefix, text })
     );
@@ -50,15 +52,12 @@ export class TestComponent implements OnInit {
   addItems() {
     setTimeout(
       () =>
-        (this.posts = [
-          ...this.posts,
-          ...this.generatePosts(50, this.posts.length),
-        ]),
+        (this.posts = [...this.posts, ...this.generatePosts(50, this.lastId)]),
       1000
     );
   }
 
   addItemsToTop() {
-    this.posts = [...this.generatePosts(1, this.posts.length), ...this.posts];
+    this.posts = [...this.generatePosts(1, this.lastId), ...this.posts];
   }
 }
