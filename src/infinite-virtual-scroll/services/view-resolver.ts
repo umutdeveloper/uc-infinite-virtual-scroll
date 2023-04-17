@@ -126,7 +126,7 @@ export function findFirstVisibleItem(
   return { viewportOffsetTop, index };
 }
 
-export function findNewIndexOfExistingItem(
+export function findNewIndex(
   items: any[],
   index: number,
   trackMap: Map<any, number>,
