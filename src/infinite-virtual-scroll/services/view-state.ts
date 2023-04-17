@@ -6,7 +6,7 @@ import {
   createViewFor,
   findFirstItemIndex,
   findFirstVisibleItem,
-  findNewIndexOfExistingItem,
+  findNewIndex,
   getTotalHeight,
   mergeMapWith,
   setMapPropertiesFor,
@@ -51,7 +51,7 @@ export class ViewState {
     } = this.calculateVisibleItemInfo(),
     forceUpdate = false
   ) {
-    const { scrollPosition, viewportOffsetTop, index } = visibleItemInfo;
+    const { scrollPosition } = visibleItemInfo;
     const firstItemIndex = findFirstItemIndex(
       this.itemMap,
       scrollPosition,
@@ -61,8 +61,7 @@ export class ViewState {
       this.firstItemIndex = firstItemIndex;
       this.updateView();
       this.updatePlaceholdersHeight();
-      const offsetTop = getTotalHeight(this.itemMap, 0, index);
-      this.scrollState.setScrollPosition(offsetTop - viewportOffsetTop);
+      this.updateScrollPosition(visibleItemInfo);
     }
   }
 
@@ -75,14 +74,19 @@ export class ViewState {
     );
     let newIndex = index;
     if (items) {
-      newIndex = findNewIndexOfExistingItem(
-        items,
-        index,
-        this.trackByMap,
-        this.trackBy
-      );
+      newIndex = findNewIndex(items, index, this.trackByMap, this.trackBy);
     }
     return { scrollPosition, viewportOffsetTop, index: newIndex };
+  }
+
+  private updateScrollPosition(visibleItemInfo: {
+    scrollPosition: number;
+    viewportOffsetTop: number;
+    index: number;
+  }) {
+    const { index, viewportOffsetTop } = visibleItemInfo;
+    const offsetTop = getTotalHeight(this.itemMap, 0, index);
+    this.scrollState.setScrollPosition(offsetTop - viewportOffsetTop);
   }
 
   private updateItems(items: any[], reset: boolean) {
