@@ -25,7 +25,7 @@ export class InfiniteVirtualForDirective implements OnChanges, OnDestroy {
 
   @Input() appInfiniteVirtualForOf: any[] = [];
   @Input() appInfiniteVirtualForSize: number;
-  @Input() appInfiniteVirtualForDebounceTime: number = 10;
+  @Input() appInfiniteVirtualForDebounceTime: number = 30;
   @Input() appInfiniteVirtualForTrackBy: string;
 
   ngOnChanges(changes: SimpleChanges) {
