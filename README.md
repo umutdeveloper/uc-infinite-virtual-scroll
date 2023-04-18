@@ -1,4 +1,3 @@
-
 # Infinite Virtual Scroll with Dynamic Sized Items
 
 This is an usage repository of custom infinite virtual scroll library that allows for an infinite virtual scroll with dynamic sized items. It uses async loading to fetch new items as needed, and only renders a virtual list of the elements in the DOM. This means that it can handle very large data sets without sacrificing performance.
@@ -18,30 +17,32 @@ Angular CDK has the autosize directive that it has been developing experimentall
 - Easy to reset view and update items
 
 ## Demo
+
 [Try the Demo in StackBlitz](https://stackblitz.com/edit/uc-ngx-infinite-virtual-scroll)
 
 ## Supported API
+
 ### Properties
 
-| @Input() | Type | Required | Default | Description
-|--|--|--|--|--|
-| *appInfiniteVirtualFor | any[] | optional | [] | List of items to display in viewport |
-| size | number | required | - | Specifies how many elements to render on the DOM in the viewport at once. |
-| debounceTime | number | optional | 10 | Debounce time to be applied when listening to scroll event in viewport (ms) |
-| trackBy | string | required | - | Item field name to use when comparing existing items and new ones in the viewport. For ex; 'id' |
+| @Input()                | Type   | Required | Default | Description                                                                                     |
+| ----------------------- | ------ | -------- | ------- | ----------------------------------------------------------------------------------------------- |
+| \*appInfiniteVirtualFor | any[]  | optional | []      | List of items to display in viewport                                                            |
+| size                    | number | required | -       | Specifies how many elements to render on the DOM in the viewport at once.                       |
+| debounceTime            | number | optional | 30      | Debounce time to be applied when listening to scroll event in viewport (ms)                     |
+| trackBy                 | string | required | -       | Item field name to use when comparing existing items and new ones in the viewport. For ex; 'id' |
 
 ### Events
 
-| @Output() | Type | Event Type | Required | Description
-|--|--|--|--|--|
-| onScrollAtBottom | EventEmitter | void | optional | It is triggered when the viewport scroll position is at the bottom. |
+| @Output()        | Type         | Event Type | Required | Description                                                         |
+| ---------------- | ------------ | ---------- | -------- | ------------------------------------------------------------------- |
+| onScrollAtBottom | EventEmitter | void       | optional | It is triggered when the viewport scroll position is at the bottom. |
 
 ### Actions
 
-| Method | Description
-|--|--|
+| Method          | Description                                               |
+| --------------- | --------------------------------------------------------- |
 | scrollToStart() | Moves the viewport scroll position to the starting point. |
-| reset() | Resets viewport, clears items. |
+| reset()         | Resets viewport, clears items.                            |
 
 ## Usage
 
@@ -58,6 +59,7 @@ First, **InfiniteVirtualScrollModule** is added to the main module or, if the co
 export class TestComponent implements OnInit {
 ...
 ```
+
 Then, our infinite scroll directive is run in the virtual viewport in the HTML.
 
 ```html
@@ -73,6 +75,7 @@ Then, our infinite scroll directive is run in the virtual viewport in the HTML.
   </app-infinite-virtual-scroll-viewport>
 </div>
 ```
+
 And it's ready, now you can listen to the events and trigger the actions by accessing the viewport component.
 
 ```ts
@@ -99,7 +102,7 @@ export class TestComponent {
     this.viewport.reset();
     this.posts = [...this.generatePosts(30, 0)];
   }
-  
+
   generatePosts(length: number, idPrefix: number) {
     return Array.from({ length }, generateParagraph.bind(this)).map(
       (text: string, index) => ({ id: index + idPrefix, text })
@@ -110,7 +113,7 @@ export class TestComponent {
     this.posts.splice(5, 3);
     this.posts = [...this.posts];
   }
-  
+
   addItems() {
     // Simulate async adding...
     setTimeout(
